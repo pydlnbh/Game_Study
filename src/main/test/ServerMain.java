@@ -8,7 +8,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 
-public class ServerMainTest {
+public class ServerMain {
     public static void main(String[] args) {
         // 实例化bossGroup(拉客的美女)
         NioEventLoopGroup boosGroup = new NioEventLoopGroup();
@@ -26,14 +26,14 @@ public class ServerMainTest {
         bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel socketChannel) throws Exception {
-                // 通过pipeline的addLast方法加入一些初始化参数
                 socketChannel.pipeline().addLast(
                         // Http服务器编解码
                         new HttpServerCodec(),
                         // 内容长度限制, 两个字节
                         new HttpObjectAggregator(65535),
-                        // websocket协议
-                        new WebSocketServerProtocolHandler("/websocket")
+                        new WebSocketServerProtocolHandler("/websocket"),
+                        new GameMsgDecoder(),
+                        new GameMsgHandler()
                 );
             }
         });
