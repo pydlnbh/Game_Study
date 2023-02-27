@@ -33,6 +33,7 @@ public class ServerMain {
                         new HttpObjectAggregator(65535),
                         new WebSocketServerProtocolHandler("/websocket"),
                         new GameMsgDecoder(),
+                        new GameMsgEncoder(),
                         new GameMsgHandler()
                 );
             }
@@ -40,7 +41,7 @@ public class ServerMain {
 
         try {
             // 使用启动器绑定端口, 一定使用sync()方法, 负责启动不成功
-            ChannelFuture channelFuture = bootstrap.bind(1234).sync();
+            ChannelFuture channelFuture = bootstrap.bind(12345).sync();
 
             if (channelFuture.isSuccess()) {
                 System.out.println("服务器启动成功");
