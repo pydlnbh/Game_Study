@@ -24,11 +24,6 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameMsgHandler.class);
 
     /**
-     * 信道组, 注意这里一定要用static, 否则无法实现群发
-     */
-    private static final ChannelGroup channelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-
-    /**
      * 用户字典
      */
     private static final Map<Integer, User> userMap = new HashMap<>();
@@ -41,7 +36,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
 
         try {
             super.channelActive(ctx);
-            channelGroup.add(ctx.channel());
+            Broadcaster.addChannel(ctx.channel());
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -51,7 +46,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         super.handlerRemoved(ctx);
 
-        channelGroup.remove(ctx.channel());
+        Broadcaster.removeChannel(ctx.channel());
 
         Integer userId = (Integer) ctx.channel().attr(AttributeKey.valueOf("userId")).get();
 
@@ -65,7 +60,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
         resultBuilder.setQuitUserId(userId);
 
         GameMsgProtocol.UserQuitResult newResult = resultBuilder.build();
-        channelGroup.writeAndFlush(newResult);
+        Broadcaster.broadcast(newResult);
     }
 
     @Override
@@ -98,7 +93,8 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
 
                 // 构建结果并广播
                 GameMsgProtocol.UserEntryResult newResult = resultBuilder.build();
-                channelGroup.writeAndFlush(newResult);
+                Broadcaster.broadcast(newResult);
+
             } else if (msg instanceof GameMsgProtocol.WhoElseIsHereCmd) {
                 // 还有谁在场
                 GameMsgProtocol.WhoElseIsHereResult.Builder resultBuider = GameMsgProtocol.WhoElseIsHereResult.newBuilder();
@@ -116,6 +112,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
 
                 GameMsgProtocol.WhoElseIsHereResult newResult = resultBuider.build();
                 ctx.writeAndFlush(newResult);
+
             } else if (msg instanceof GameMsgProtocol.UserMoveToCmd) {
                 Integer userId = (Integer) ctx.channel().attr(AttributeKey.valueOf("userId")).get();
 
@@ -131,7 +128,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
                 resultBuilder.setMoveToPosY(cmd.getMoveToPosY());
 
                 GameMsgProtocol.UserMoveToResult newResult = resultBuilder.build();
-                channelGroup.writeAndFlush(newResult);
+                Broadcaster.broadcast(newResult);
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
