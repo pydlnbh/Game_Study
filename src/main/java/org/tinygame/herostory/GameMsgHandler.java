@@ -6,7 +6,6 @@ import io.netty.util.AttributeKey;
 import org.tinygame.herostory.cmdHandler.UseEntryCmdHandler;
 import org.tinygame.herostory.cmdHandler.UserMoveToCmdHandler;
 import org.tinygame.herostory.cmdHandler.WhoElseIsHereCmdHandler;
-import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
