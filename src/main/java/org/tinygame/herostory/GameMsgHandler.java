@@ -1,11 +1,10 @@
 package org.tinygame.herostory;
 
+import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
-import org.tinygame.herostory.cmdHandler.UseEntryCmdHandler;
-import org.tinygame.herostory.cmdHandler.UserMoveToCmdHandler;
-import org.tinygame.herostory.cmdHandler.WhoElseIsHereCmdHandler;
+import org.tinygame.herostory.cmdHandler.*;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
@@ -47,12 +46,18 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
             return;
         }
 
-        if (msg instanceof GameMsgProtocol.UserEntryCmd) {
-            new UseEntryCmdHandler().handle(ctx, (GameMsgProtocol.UserEntryCmd) msg);
-        } else if (msg instanceof GameMsgProtocol.WhoElseIsHereCmd) {
-            new WhoElseIsHereCmdHandler().handle(ctx, (GameMsgProtocol.WhoElseIsHereCmd) msg);
-        } else if (msg instanceof GameMsgProtocol.UserMoveToCmd) {
-            new UserMoveToCmdHandler().handle(ctx, (GameMsgProtocol.UserMoveToCmd) msg);
+        ICmdHandle<? extends GeneratedMessageV3> cmd = CmdHandleFactory.create(msg.getClass());
+
+        if (cmd != null) {
+            cmd.handle(ctx, cast(msg));
+        }
+    }
+
+    private static <T extends GeneratedMessageV3> T cast(Object msg) {
+        if (msg == null) {
+            return null;
+        } else {
+            return (T) msg;
         }
     }
 }

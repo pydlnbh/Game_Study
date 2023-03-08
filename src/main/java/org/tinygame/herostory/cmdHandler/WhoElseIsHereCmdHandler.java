@@ -5,7 +5,8 @@ import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
-public class WhoElseIsHereCmdHandler {
+public class WhoElseIsHereCmdHandler implements ICmdHandle<GameMsgProtocol.WhoElseIsHereCmd>{
+    @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.WhoElseIsHereCmd msg) {
         // 还有谁在场
         GameMsgProtocol.WhoElseIsHereResult.Builder resultBuider = GameMsgProtocol.WhoElseIsHereResult.newBuilder();

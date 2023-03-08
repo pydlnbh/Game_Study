@@ -7,7 +7,8 @@ import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
-public class UseEntryCmdHandler {
+public class UseEntryCmdHandler implements ICmdHandle<GameMsgProtocol.UserEntryCmd>{
+    @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserEntryCmd msg) {
         // 用户入场消息
         GameMsgProtocol.UserEntryCmd cmd = msg;

@@ -2,6 +2,7 @@ package org.tinygame.herostory;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -27,43 +28,31 @@ public class GameMsgDecoder extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        try {
-            BinaryWebSocketFrame inputFrame = (BinaryWebSocketFrame) msg;
-            ByteBuf byteBuf = inputFrame.content();
+        BinaryWebSocketFrame inputFrame = (BinaryWebSocketFrame) msg;
+        ByteBuf byteBuf = inputFrame.content();
 
-            // 读取消息的长度
-            byteBuf.readShort();
-            // 读取消息编号
-            int msgCode = byteBuf.readShort();
+        // 读取消息的长度
+        byteBuf.readShort();
+        // 读取消息编号
+        int msgCode = byteBuf.readShort();
 
-            // 拿到消息体
-            byte[] msgBody = new byte[byteBuf.readableBytes()];
-            byteBuf.readBytes(msgBody);
+        // 获取消息构造者
+        Message.Builder msgBuilder = GameMsgRecognizer.getBuilderByMsgCode(msgCode);
+        if (msgBuilder == null) {
+            LOGGER.error("无法识别的消息, msgCode = {}", msgCode);
+            return;
+        }
 
-            GeneratedMessageV3 cmd = null;
+        // 拿到消息体
+        byte[] msgBody = new byte[byteBuf.readableBytes()];
+        byteBuf.readBytes(msgBody);
 
-            switch (msgCode) {
-                case GameMsgProtocol.MsgCode.USER_ENTRY_CMD_VALUE:
-                    cmd = GameMsgProtocol.UserEntryCmd.parseFrom(msgBody);
-                    break;
+        msgBuilder.clear();
+        msgBuilder.mergeFrom(msgBody);
+        Message message = msgBuilder.build();
 
-                case GameMsgProtocol.MsgCode.WHO_ELSE_IS_HERE_CMD_VALUE:
-                    cmd = GameMsgProtocol.WhoElseIsHereCmd.parseFrom(msgBody);
-                    break;
-
-                case GameMsgProtocol.MsgCode.USER_MOVE_TO_CMD_VALUE:
-                    cmd = GameMsgProtocol.UserMoveToCmd.parseFrom(msgBody);
-                    break;
-
-                default:
-                    break;
-            }
-
-            if (null != cmd) {
-                ctx.fireChannelRead(cmd);
-            }
-        } catch (InvalidProtocolBufferException e) {
-            LOGGER.error(e.getMessage(), e);
+        if (message != null) {
+            ctx.fireChannelRead(message);
         }
     }
 }
