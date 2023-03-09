@@ -18,8 +18,6 @@ import org.tinygame.herostory.cmdHandler.CmdHandleFactory;
 
 /**
  * 服务器启动类
- *
- * @author cmmdyq
  */
 public class ServerMain {
 
