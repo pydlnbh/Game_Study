@@ -4,7 +4,8 @@ import com.google.protobuf.GeneratedMessageV3;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
-import org.tinygame.herostory.cmdHandler.*;
+import org.tinygame.herostory.cmdhandler.CmdHandlerFactory;
+import org.tinygame.herostory.cmdhandler.ICmdHandler;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
@@ -31,7 +32,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
             return;
         }
 
-        UserManager.removeUserById(userId);
+        UserManager.removeByUserId(userId);
 
         GameMsgProtocol.UserQuitResult.Builder resultBuilder = GameMsgProtocol.UserQuitResult.newBuilder();
         resultBuilder.setQuitUserId(userId);
@@ -46,7 +47,7 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
             return;
         }
 
-        ICmdHandle<? extends GeneratedMessageV3> cmd = CmdHandleFactory.create(msg.getClass());
+        ICmdHandler<? extends GeneratedMessageV3> cmd = CmdHandlerFactory.create(msg.getClass());
 
         if (cmd != null) {
             cmd.handle(ctx, cast(msg));

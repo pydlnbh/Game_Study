@@ -1,9 +1,9 @@
-package org.tinygame.herostory.cmdHandler;
+package org.tinygame.herostory.cmdhandler;
 
 import com.google.protobuf.GeneratedMessageV3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tinygame.herostory.msg.GameMsgProtocol;
+import org.tinygame.herostory.cmdhandler.ICmdHandler;
 import org.tinygame.herostory.util.PackageUtil;
 
 import java.lang.reflect.Method;
@@ -15,33 +15,33 @@ import java.util.Set;
 /**
  * 指令处理器工厂
  */
-public final class CmdHandleFactory {
+public final class CmdHandlerFactory {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CmdHandleFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(org.tinygame.herostory.cmdhandler.CmdHandlerFactory.class);
 
     /**
      * 处理器字典
      */
-    private static Map<Class<?>, ICmdHandle<? extends GeneratedMessageV3>> _handleMap = new HashMap<>();
+    private static Map<Class<?>, ICmdHandler<? extends GeneratedMessageV3>> _handleMap = new HashMap<>();
 
     /**
      * 私有化类构造方法
      */
-    private CmdHandleFactory() {
+    private CmdHandlerFactory() {
     }
 
     public static void init() {
         LOGGER.info("=== 完成命令与处理器的关联 ===");
 
         // 获取包名称
-        final String packageName = CmdHandleFactory.class.getPackage().getName();
+        final String packageName = org.tinygame.herostory.cmdhandler.CmdHandlerFactory.class.getPackage().getName();
         // 获取 ICmdHandler 所有的实现类
         Set<Class<?>> clazzSet = PackageUtil.listSubClazz(
                 packageName,
                 true,
-                ICmdHandle.class
+                ICmdHandler.class
         );
 
         for (Class<?> handlerClazz : clazzSet) {
@@ -80,7 +80,7 @@ public final class CmdHandleFactory {
             }
 
             try {
-                ICmdHandle<?> newInstance = (ICmdHandle<?>) handlerClazz.newInstance();
+                ICmdHandler<?> newInstance = (ICmdHandler<?>) handlerClazz.newInstance();
 
                 LOGGER.info("{} <===> {}", cmdClazz.getName(), handlerClazz.getName());
 
@@ -91,7 +91,7 @@ public final class CmdHandleFactory {
         }
     }
 
-    public static ICmdHandle<? extends GeneratedMessageV3> create(Class<?> msgClazz) {
+    public static ICmdHandler<? extends GeneratedMessageV3> create(Class<?> msgClazz) {
         if (msgClazz == null) {
             return null;
         }

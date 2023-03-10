@@ -13,7 +13,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tinygame.herostory.cmdHandler.CmdHandleFactory;
+import org.tinygame.herostory.cmdhandler.CmdHandlerFactory;
 
 
 /**
@@ -38,7 +38,7 @@ public class ServerMain {
      */
     public static void main(String[] args) {
         // 初始化
-        CmdHandleFactory.init();
+        CmdHandlerFactory.init();
         GameMsgRecognizer.init();
 
         // 设置log4j配置文件

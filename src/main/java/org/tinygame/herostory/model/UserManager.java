@@ -32,7 +32,7 @@ public final class UserManager {
      * 根据用户Id移除用户
      * @param userId
      */
-    public static void removeUserById(int userId) {
+    public static void removeByUserId(int userId) {
         userMap.remove(userId);
     }
 

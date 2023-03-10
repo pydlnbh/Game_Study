@@ -1,4 +1,4 @@
-package org.tinygame.herostory.cmdHandler;
+package org.tinygame.herostory.cmdhandler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
@@ -7,7 +7,7 @@ import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
-public class UseEntryCmdHandler implements ICmdHandle<GameMsgProtocol.UserEntryCmd>{
+public class UseEntryCmdHandler implements ICmdHandler<GameMsgProtocol.UserEntryCmd> {
     @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserEntryCmd msg) {
         // 用户入场消息

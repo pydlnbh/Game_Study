@@ -1,11 +1,11 @@
-package org.tinygame.herostory.cmdHandler;
+package org.tinygame.herostory.cmdhandler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.AttributeKey;
 import org.tinygame.herostory.Broadcaster;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
-public class UserMoveToCmdHandler implements ICmdHandle<GameMsgProtocol.UserMoveToCmd>{
+public class UserMoveToCmdHandler implements ICmdHandler<GameMsgProtocol.UserMoveToCmd> {
     @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserMoveToCmd msg) {
         Integer userId = (Integer) ctx.channel().attr(AttributeKey.valueOf("userId")).get();

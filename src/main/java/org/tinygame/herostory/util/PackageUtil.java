@@ -3,6 +3,8 @@ package org.tinygame.herostory.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -67,6 +69,12 @@ public final class PackageUtil {
             while (urlEnum.hasMoreElements()) {
                 // 获取当前 URL
                 URL currUrl = urlEnum.nextElement();
+
+                if (currUrl.toString().contains("%20")) {
+                    String trimUrl = currUrl.toString().replaceAll("%20", " ");
+                    currUrl = new URL(trimUrl);
+                }
+
                 // 获取协议文本
                 final String protocol = currUrl.getProtocol();
                 // 定义临时集合
