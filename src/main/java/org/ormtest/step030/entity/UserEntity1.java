@@ -1,0 +1,24 @@
+package org.ormtest.step030.entity;
+
+/**
+ * 用户实体
+ */
+public class UserEntity1 {
+    /**
+     * 用户Id
+     */
+    @Column(name = "user_id")
+    public int _userId;
+
+    /**
+     * 用户名
+     */
+    @Column(name = "user_name")
+    public String userName;
+
+    /**
+     * 密码
+     */
+    @Column(name = "password")
+    public String _password;
+}
