@@ -24,12 +24,12 @@ public final class UserManager {
      */
     public static void addUser(User newUser) {
         if (newUser != null) {
-            userMap.put(newUser.userId, newUser);
+            userMap.put(newUser.getUserId(), newUser);
         }
     }
 
     /**
-     * 根据用户Id移除用户
+     * 根据用户 Id移除用户
      * @param userId
      */
     public static void removeByUserId(int userId) {
@@ -43,5 +43,15 @@ public final class UserManager {
      */
     public static Collection<User> listUser() {
         return userMap.values();
+    }
+
+    /**
+     * 根据用户 Id获取用户
+     *
+     * @param userId 用户 Id
+     * @return 用户对象
+     */
+    public static User getUserById(Integer userId) {
+        return userMap.get(userId);
     }
 }

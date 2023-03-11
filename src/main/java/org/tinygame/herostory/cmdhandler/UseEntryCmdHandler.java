@@ -7,7 +7,16 @@ import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
+/**
+ * 用户进场指令处理器
+ */
 public class UseEntryCmdHandler implements ICmdHandler<GameMsgProtocol.UserEntryCmd> {
+    /**
+     * 指令处理方法
+     *
+     * @param ctx 通道处理程序上下文
+     * @param msg 消息
+     */
     @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserEntryCmd msg) {
         // 用户入场消息
@@ -21,8 +30,8 @@ public class UseEntryCmdHandler implements ICmdHandler<GameMsgProtocol.UserEntry
 
         // 将用户加入字典
         User newUser = new User();
-        newUser.userId = userId;
-        newUser.heroAvatar = heroAvatar;
+        newUser.setUserId(userId);
+        newUser.setHeroAvatar(heroAvatar);
         UserManager.addUser(newUser);
 
         // 将用户id附着Channel

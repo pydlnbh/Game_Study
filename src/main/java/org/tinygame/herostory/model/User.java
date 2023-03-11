@@ -8,10 +8,48 @@ public class User {
     /**
      * 用户id
      */
-    public int userId;
+    private int userId;
 
     /**
      * 用户形象
      */
-    public String heroAvatar;
+    private String heroAvatar;
+
+    /**
+     * 当前血量
+     */
+    private int currHp = 100;
+
+    /**
+     * 移动状态
+     */
+    private final MoveState moveState = new MoveState();
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getHeroAvatar() {
+        return heroAvatar;
+    }
+
+    public void setHeroAvatar(String heroAvatar) {
+        this.heroAvatar = heroAvatar;
+    }
+
+    public int getCurrHp() {
+        return currHp;
+    }
+
+    public void setCurrHp(int currHp) {
+        this.currHp = currHp;
+    }
+
+    public MoveState getMoveState() {
+        return moveState;
+    }
 }
