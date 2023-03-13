@@ -1,7 +1,8 @@
 package org.ormtest.step040;
 
-import org.ormtest.step030.entity.T_Helper;
-import org.ormtest.step030.entity.UserEntity1;
+import org.ormtest.step040.entity.AbstractEntityHelper;
+import org.ormtest.step040.entity.EntityHelperFactory;
+import org.ormtest.step040.entity.UserEntity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -46,13 +47,13 @@ public class App040 {
         ResultSet rs = stmt.executeQuery(sql);
 
         // 创建助手工具类
-        T_Helper helper = new T_Helper();
+        AbstractEntityHelper helper = EntityHelperFactory.getEntityHelper(UserEntity.class);
 
         // 获取开始时间
         long t0 = System.currentTimeMillis();
 
         while (rs.next()) {
-            UserEntity1 ue = helper.create(UserEntity1.class, rs);
+            UserEntity ue = (UserEntity) helper.create(rs);
         }
 
         // 获取结束时间
