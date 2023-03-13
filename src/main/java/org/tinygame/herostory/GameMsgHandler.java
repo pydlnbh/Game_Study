@@ -43,22 +43,9 @@ public class GameMsgHandler extends SimpleChannelInboundHandler<Object> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (null == ctx || null == msg) {
-            return;
-        }
-
-        ICmdHandler<? extends GeneratedMessageV3> cmd = CmdHandlerFactory.create(msg.getClass());
-
-        if (cmd != null) {
-            cmd.handle(ctx, cast(msg));
+        if (msg instanceof GeneratedMessageV3) {
+            MainThreadProcessor.getInstance().process(ctx, (GeneratedMessageV3) msg);
         }
     }
 
-    private static <T extends GeneratedMessageV3> T cast(Object msg) {
-        if (msg == null) {
-            return null;
-        } else {
-            return (T) msg;
-        }
-    }
 }
