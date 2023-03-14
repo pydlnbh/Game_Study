@@ -40,6 +40,7 @@ public class ServerMain {
         // 初始化
         CmdHandlerFactory.init();
         GameMsgRecognizer.init();
+        MySqlSessionFactory.init();
 
         // 设置log4j配置文件
         PropertyConfigurator.configure(ServerMain.class.getClassLoader().getResourceAsStream("log4j.properties"));

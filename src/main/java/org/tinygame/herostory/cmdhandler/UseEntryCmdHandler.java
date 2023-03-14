@@ -21,21 +21,22 @@ public class UseEntryCmdHandler implements ICmdHandler<GameMsgProtocol.UserEntry
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserEntryCmd msg) {
         // 用户入场消息
         GameMsgProtocol.UserEntryCmd cmd = msg;
-        int userId = cmd.getUserId();
-        String heroAvatar = cmd.getHeroAvatar();
+
+        // 将用户id附着Channel
+        Integer userId = (Integer) ctx.channel().attr(AttributeKey.valueOf("userId")).get();
+
+        User userInfo = UserManager.getUserById(userId);
+        if (userInfo == null) {
+            return;
+        }
+
+        String userName = userInfo.getUserName();
+        String heroAvatar = userInfo.getHeroAvatar();
 
         GameMsgProtocol.UserEntryResult.Builder resultBuilder = GameMsgProtocol.UserEntryResult.newBuilder();
         resultBuilder.setUserId(userId);
+        resultBuilder.setUserName(userName);
         resultBuilder.setHeroAvatar(heroAvatar);
-
-        // 将用户加入字典
-        User newUser = new User();
-        newUser.setUserId(userId);
-        newUser.setHeroAvatar(heroAvatar);
-        UserManager.addUser(newUser);
-
-        // 将用户id附着Channel
-        ctx.channel().attr(AttributeKey.valueOf("userId")).set(userId);
 
         // 构建结果并广播
         GameMsgProtocol.UserEntryResult newResult = resultBuilder.build();
