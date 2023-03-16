@@ -72,6 +72,17 @@ public final class MainThreadProcessor {
         });
     }
 
+    /**
+     * 处理消息
+     *
+     * @param r 实例
+     */
+    public void process(Runnable r) {
+        if (r != null) {
+            _es.submit(r);
+        }
+    }
+
     private static <T extends GeneratedMessageV3> T cast(Object msg) {
         if (msg == null) {
             return null;
