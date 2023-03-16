@@ -19,9 +19,6 @@ public class UseEntryCmdHandler implements ICmdHandler<GameMsgProtocol.UserEntry
      */
     @Override
     public void handle(ChannelHandlerContext ctx, GameMsgProtocol.UserEntryCmd msg) {
-        // 用户入场消息
-        GameMsgProtocol.UserEntryCmd cmd = msg;
-
         // 将用户id附着Channel
         Integer userId = (Integer) ctx.channel().attr(AttributeKey.valueOf("userId")).get();
 
