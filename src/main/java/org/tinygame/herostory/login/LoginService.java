@@ -55,12 +55,6 @@ public final class LoginService {
             return;
         }
 
-        try {
-            Thread.sleep((long) 0.5);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         IAsyncOperation asyncOp = new AsyncGetUserByName(userName, password) {
 
             /**
