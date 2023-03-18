@@ -14,6 +14,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tinygame.herostory.cmdhandler.CmdHandlerFactory;
+import org.tinygame.herostory.util.RedisUtil;
 
 
 /**
@@ -41,6 +42,7 @@ public class ServerMain {
         CmdHandlerFactory.init();
         GameMsgRecognizer.init();
         MySqlSessionFactory.init();
+        RedisUtil.init();
 
         // 设置log4j配置文件
         PropertyConfigurator.configure(ServerMain.class.getClassLoader().getResourceAsStream("log4j.properties"));

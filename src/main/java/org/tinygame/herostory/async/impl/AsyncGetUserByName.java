@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tinygame.herostory.MySqlSessionFactory;
 import org.tinygame.herostory.async.IAsyncOperation;
+import org.tinygame.herostory.login.LoginService;
 import org.tinygame.herostory.login.db.IUserDAO;
 import org.tinygame.herostory.login.db.UserEntity;
 
@@ -96,6 +97,8 @@ public class AsyncGetUserByName implements IAsyncOperation {
             }
 
             _userEntity = userEntity;
+
+            LoginService.getInstance().updateUserBasicInfoInRedis(userEntity);
         } catch (Exception e) {
             LOGGER.info(e.getMessage(), e);
         }
