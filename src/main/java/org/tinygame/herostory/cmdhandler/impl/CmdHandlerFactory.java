@@ -1,4 +1,4 @@
-package org.tinygame.herostory.cmdhandler;
+package org.tinygame.herostory.cmdhandler.impl;
 
 import com.google.protobuf.GeneratedMessageV3;
 import org.slf4j.Logger;
@@ -19,7 +19,7 @@ public final class CmdHandlerFactory {
     /**
      * 日志对象
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(org.tinygame.herostory.cmdhandler.CmdHandlerFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CmdHandlerFactory.class);
 
     /**
      * 处理器字典
@@ -36,7 +36,7 @@ public final class CmdHandlerFactory {
         LOGGER.info("=== 完成命令与处理器的关联 ===");
 
         // 获取包名称
-        final String packageName = org.tinygame.herostory.cmdhandler.CmdHandlerFactory.class.getPackage().getName();
+        final String packageName = CmdHandlerFactory.class.getPackage().getName();
         // 获取 ICmdHandler 所有的实现类
         Set<Class<?>> clazzSet = PackageUtil.listSubClazz(
                 packageName,

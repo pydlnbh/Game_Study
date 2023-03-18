@@ -1,6 +1,7 @@
-package org.tinygame.herostory.cmdhandler;
+package org.tinygame.herostory.cmdhandler.impl;
 
 import io.netty.channel.ChannelHandlerContext;
+import org.tinygame.herostory.cmdhandler.ICmdHandler;
 import org.tinygame.herostory.model.MoveState;
 import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;

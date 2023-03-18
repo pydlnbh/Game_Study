@@ -13,7 +13,7 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tinygame.herostory.cmdhandler.CmdHandlerFactory;
+import org.tinygame.herostory.cmdhandler.impl.CmdHandlerFactory;
 import org.tinygame.herostory.util.RedisUtil;
 
 
