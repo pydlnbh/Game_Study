@@ -8,6 +8,8 @@ import org.tinygame.herostory.Broadcaster;
 import org.tinygame.herostory.cmdhandler.ICmdHandler;
 import org.tinygame.herostory.model.User;
 import org.tinygame.herostory.model.UserManager;
+import org.tinygame.herostory.model.VictorMsg;
+import org.tinygame.herostory.mq.MQProducer;
 import org.tinygame.herostory.msg.GameMsgProtocol;
 
 /**
@@ -63,7 +65,10 @@ public class UserAttackCmdHandler implements ICmdHandler<GameMsgProtocol.UserAtt
         broadcastSubtractHp(targetUserId, subtractHP);
 
         // 广播死亡消息
-        broadcastDie(targetUserId, targetUser);
+        broadcastDie(targetUser);
+
+        // 发送 MQ 消息
+        sendMqMessage(userId, targetUser);
     }
 
     /**
@@ -89,18 +94,37 @@ public class UserAttackCmdHandler implements ICmdHandler<GameMsgProtocol.UserAtt
     /**
      * 广播死亡消息
      *
-     * @param targetUserId 被攻击用户Id
      * @param targetUser 被攻击用户对象
      */
-    private static void broadcastDie(int targetUserId, User targetUser) {
-        if (targetUserId <= 0 ||
+    private static void broadcastDie(User targetUser) {
+        if (targetUser.getUserId() <= 0 ||
             targetUser.getCurrHp() > 0) {
             return;
         }
 
         GameMsgProtocol.UserDieResult.Builder dieResult = GameMsgProtocol.UserDieResult.newBuilder();
-        dieResult.setTargetUserId(targetUserId);
+        dieResult.setTargetUserId(targetUser.getUserId());
         GameMsgProtocol.UserDieResult userDieResult = dieResult.build();
         Broadcaster.broadcast(userDieResult);
+    }
+
+    /**
+     * 发送 MQ 消息
+     *
+     * @param userId 攻击用户 Id
+     * @param targetUser 被攻击用户
+     */
+    private static void sendMqMessage(Integer userId, User targetUser) {
+        if (targetUser.getUserId() <= 0 ||
+            targetUser.getCurrHp() > 0 ||
+            targetUser.isDied()) {
+            return;
+        }
+
+        targetUser.setDied(true);
+        VictorMsg mqMsg = new VictorMsg();
+        mqMsg.setWinnerId(userId);
+        mqMsg.setLoserId(targetUser.getUserId());
+        MQProducer.sendMsg("Victor", mqMsg);
     }
 }

@@ -23,7 +23,12 @@ public class User {
     /**
      * 当前血量
      */
-    private int currHp = 100;
+    private int currHp;
+
+    /**
+     * 是否已经死亡
+     */
+    private boolean died;
 
     /**
      * 移动状态
@@ -64,5 +69,13 @@ public class User {
 
     public MoveState getMoveState() {
         return moveState;
+    }
+
+    public boolean isDied() {
+        return died;
+    }
+
+    public void setDied(boolean died) {
+        this.died = died;
     }
 }

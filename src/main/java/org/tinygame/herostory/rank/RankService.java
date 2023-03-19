@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.tinygame.herostory.async.AsyncOperationProcessor;
 import org.tinygame.herostory.async.IAsyncOperation;
 import org.tinygame.herostory.async.impl.AsyncGetRank;
+import org.tinygame.herostory.util.RedisUtil;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.function.Function;
@@ -54,5 +56,28 @@ public final class RankService {
         };
 
         AsyncOperationProcessor.getInstance().process(asyncOp);
+    }
+
+    /**
+     * 刷新排行榜
+     *
+     * @param winnerId 赢家 Id
+     * @param loserId 输家 Id
+     */
+    public void refreshRank(int winnerId, int loserId) {
+        try (Jedis redis = RedisUtil.getRedis()) {
+            // 增加用户的输赢次数
+            redis.hincrBy("User_" + winnerId, "Win", 1);
+            redis.hincrBy("User_" + loserId, "Lose", 1);
+
+            // 计算赢的次数
+            String winStr = redis.hget("User_" + winnerId, "Win");
+            int winInt = Integer.parseInt(winStr);
+
+            // 修改排行榜
+            redis.zadd("Rank", winInt, String.valueOf(winnerId));
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 }
